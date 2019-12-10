@@ -12,35 +12,77 @@
 <body>
     <?php
     $link = mysqli_connect("localhost", "root", "", "todo");
+    //project table
     $sql = " SELECT * FROM projects  ORDER BY `timestamp` ASC";
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_array($result);
     if (mysqli_num_rows($result) == true) : ?>
-        <table class="">
-            <?php foreach ($result as $row) : $id = $row['ID'];?>
-                <tr class="" onclick="showtask()" id ="<?php  echo $row['ID']  ?>">
-                    <td><?php echo $row['name'] ?> </td>
-                    <td><?php echo $row['ID']  ?>  </td>
-                </tr> 
-                <?php endforeach; ?>
-        </table>
+        <div class="table1">
+            <?php foreach ($result as $row) : ?>
+                <h2><a href="index.php?id=<?php echo $row['id'] ?>"> <?php echo $row['name'] ?> </a> </h2>
+            <?php endforeach; ?>
+            <form method="POST" action="index.php">
+                <input type="text" name="project" placeholder="Name of the new project">
+                <input class="name" type="submit" name="submit" value="ADD">
+            </form>
+        </div>
     <?php endif;
-     echo $id;
-    $sl = " SELECT * FROM tasks WHERE project='$id'  ORDER BY `piority` DESC ";
-    $result = mysqli_query($link, $sl);
-    $row = mysqli_fetch_array($result);
-    if (mysqli_num_rows($result) == true) : ?>
-        <table >
-            <?php foreach ($result as $row) : ?><tr  id="tasks" >
-                    <td><?php echo $row['taskname'] ?> </td>
-                </tr>
-                <tr ><td id=""><?php echo $row['taskdescription'] ?></td></tr>
-                <tr ><td id=""><?php echo $row['progration'] ?></td</tr><?php endforeach; ?>
-        </table>
-    <?php endif;
+    if (isset($_POST['submit'])) {
+        if (!isset($_POST['project'])) {
+            echo "Please enter the information!";
+            exit;
+        } else {
+            $project = $_POST['project'];
+            $sq = "INSERT INTO projects(`name`) VALUES ('$project')";
+            if (mysqli_query($link, $sq)) {
+                echo "<br>Info added";
+                header('Location:index.php');
+            }
+        }
+    }
+
+
+    //tasks table 
+    $id = $_GET["id"];
+    $sl = " SELECT * FROM tasks WHERE project='$id'  ORDER BY `piority` ASC ";
+    $res = mysqli_query($link, $sl);
+    $row2 = mysqli_fetch_array($res);
+    if (mysqli_num_rows($res) == true) : ?>
+        <div class="table2">
+            <?php foreach ($res as $row2) : ?>
+                <h2 id="tasks"><a href="index.php? id2=<?php echo $row2['id'] ?>"><?php echo $row2['taskname'] ?> </a> </h2>
+                <div id="hidden">
+                    <h2><?php echo $row2['taskdescription'] ?></h2>
+                    <h2><?php echo $row2['progration'] ?></h2>
+                </div><?php endforeach; ?>
+
+        </div> <?php endif;
+
+                if ($id == true) : ?>
+        <form method="POST" action="index.php">
+            <input type="text" name="task" placeholder="Name of the new task">
+            <input class="name" type="submit" name="submittask" value="ADD task">
+        </form>
+    <?php endif; echo $id;
+    if (isset($_POST['submittask'])) {
+        
+        if (empty($_POST['task'])) {
+            echo "Please enter the information!";
+           // exit;
+        } else {
+            $task = $_POST['task'];
+          
+            $s = "INSERT INTO tasks(taskname, project) VALUES ('$task', '$id') ";
+            if (mysqli_query($link, $s)) {
+                echo "<br>Info added";
+               // header('Location:index.php');
+            }
+        }
+    }
     ?>
 
 </body>
-<script src="../js/show.js"></script>
+<script src="../js/show.js">
+</script>
 
 </html>

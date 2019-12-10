@@ -1,7 +1,15 @@
+.table1 {
+    display: table;
+}
+
+a {
+    text-decoration: none;
+}
+
 #hidden {
     display: none;
 }
 
-#tasks {
+#hiddena {
     display: none;
 }
