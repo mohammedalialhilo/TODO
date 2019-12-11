@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<?php include 'id.php';
+?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,7 +13,7 @@
 <body>
     <?php
     $link = mysqli_connect("localhost", "root", "", "todo");
-    session_start();
+    
     //project table
     $sql = " SELECT * FROM projects  ORDER BY `timestamp` ASC";
     $result = mysqli_query($link, $sql);
@@ -42,6 +43,7 @@
         }
     }
     //tasks table 
+
     $id = $_GET["id"];
     $_SESSION["id"] = "$id";
     $sl = " SELECT * FROM tasks WHERE project='$id'  ORDER BY `piority` ASC ";
@@ -58,7 +60,7 @@
 
         </div> <?php endif;
 
-                if ($id == true) : ?>
+                if ($_SESSION["id"] == true) : ?>
         <form method="POST" action="index.php">
             <input type="text" name="task" placeholder="Name of the new task">
             <input class="name" type="submit" name="submittask" value="ADD task">
