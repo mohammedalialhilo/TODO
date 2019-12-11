@@ -41,8 +41,6 @@
             }
         }
     }
-
-
     //tasks table 
     $id = $_GET["id"];
     $_SESSION["id"] = "$id";
